@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DiscoveryClientResultsFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Results>
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.DiscoveryDocumentReference" url="http://maverikbizus65.plumriver.net/mockup/stylemapping.asmx?disco" filename="stylemapping.disco" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="http://maverikbizus65.plumriver.net/mockup/stylemapping.asmx?wsdl" filename="stylemapping.wsdl" />
+  </Results>
+</DiscoveryClientResultsFile>
