@@ -22,6 +22,10 @@ namespace OfflineFileGenerator
 {
     public class TabularFormGenerator
     {
+        public string BookingCatalog { get; set; }
+        string TabularColorWithImageLink = ConfigurationManager.AppSettings["TabularColorWithImageLink"] == null ? "0" : ConfigurationManager.AppSettings["TabularColorWithImageLink"];
+        string TabularImageLinkFormat = ConfigurationManager.AppSettings["TabularImageLinkFormat"];
+
         public void GenerateTabularOrderForm(string templateFile, string filename, string soldto, string catalog, string pricecode, string savedirectory)
         {
             WriteToLog(DateTime.Now.ToString() + " Begin " + filename);
@@ -43,6 +47,7 @@ namespace OfflineFileGenerator
                         WriteToLog("catalog temp: " + templateFile);
                     }
                 }
+                BookingCatalog = GetColumnValue(catalogRow, "BookingCatalog");
             }
             //catalog support; for blackdimand UIUX DEV
             var catalogPartName = Path.GetInvalidFileNameChars().Aggregate(catalog, (current, c) => current.Replace(c.ToString(), ""));
@@ -571,6 +576,21 @@ namespace OfflineFileGenerator
                             SetCellStyle(cell, backColor);
                         else
                             SetCellStyle(cell, backColor, true, true, true, false);
+
+                        //add image link to cell, bdeu #1297
+                        if (TabularColorWithImageLink == "1")
+                        {
+                            if (!string.IsNullOrEmpty(TabularImageLinkFormat))
+                            {
+                                var styleImageValue = GetColumnValue(row, "ImageName");
+                                styleImageValue = styleImageValue.Replace("small/", string.Empty).Replace(".jpg", string.Empty).Replace(".png", string.Empty).Trim();
+                                var cellImageLinkFormat = string.Format(TabularImageLinkFormat, styleImageValue, color);
+
+                                cell.Formula = cellImageLinkFormat;
+                                cell.Style.Font.UnderLine = true;
+                                cell.Style.Font.Color.SetColor(System.Drawing.Color.Blue);
+                            }
+                        }
                     }
                     else
                     {
@@ -606,8 +626,16 @@ namespace OfflineFileGenerator
                     }
                     break;
                 default:
-                    cell = SetCellValue(sheet, colInfo[0], rowIndex, GetColumnValue(row, colInfo[1]), datatype);
-                    SetCellStyle(cell, backColor);
+                    {
+                        var cellValue = GetColumnValue(row, colInfo[1]);
+                        if (colInfo[1] == "DateQty" || colInfo[1] == "ATPMaxQty")
+                        {
+                            if (BookingCatalog == "1") //bdeu #1297
+                                cellValue = string.Empty;
+                        }
+                        cell = SetCellValue(sheet, colInfo[0], rowIndex, cellValue, datatype);
+                        SetCellStyle(cell, backColor);
+                    }
                     break;
             }
         }

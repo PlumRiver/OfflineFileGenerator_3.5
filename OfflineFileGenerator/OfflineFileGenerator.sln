@@ -4,13 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfflineFileGenerator", "OfflineFileGenerator.csproj", "{07469DBF-10D9-40D5-8275-8386FB8A9199}"
 EndProject
 Global
-	GlobalSection(SourceCodeControl) = preSolution
-		SccNumberOfProjects = 1
-		SccProjectUniqueName0 = OfflineFileGenerator.csproj
-		SccProjectName0 = $/DEV/PRODUCT/Offline/OfflineFileGenerator/OfflineFileGenerator
-		SccLocalPath0 = .
-		SccProvider0 = MSSCCI:SourceOffSite
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
