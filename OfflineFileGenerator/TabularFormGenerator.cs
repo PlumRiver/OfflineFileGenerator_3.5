@@ -624,6 +624,11 @@ namespace OfflineFileGenerator
                         SetCellStyle(cell, backColor);
                         cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                     }
+                    else //#bdeu 186 set cell style when launch date is empty
+                    {
+                        cell = SetCellValue(sheet, colInfo[0], rowIndex, string.Empty, "3");
+                        SetCellStyle(cell, backColor);
+                    }
                     break;
                 default:
                     {
