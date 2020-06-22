@@ -25,6 +25,9 @@ namespace OfflineFileGenerator
         public string BookingCatalog { get; set; }
         string TabularColorWithImageLink = ConfigurationManager.AppSettings["TabularColorWithImageLink"] == null ? "0" : ConfigurationManager.AppSettings["TabularColorWithImageLink"];
         string TabularImageLinkFormat = ConfigurationManager.AppSettings["TabularImageLinkFormat"];
+        string TabularHideColumnWithNonBooking = ConfigurationManager.AppSettings["TabularHideColumnWithNonBooking"] ?? string.Empty; //BDEU HIDE LAUNCH DATE #186
+        string TabularClearCellsWithNonBooking = ConfigurationManager.AppSettings["TabularClearCellsWithNonBooking"] ?? string.Empty; //BDEU HIDE LAUNCH DATE #186
+        string TabularClearCellsWithBooking = ConfigurationManager.AppSettings["TabularClearCellsWithBooking"] ?? string.Empty; //BDEU HIDE LAUNCH DATE #186
 
         public void GenerateTabularOrderForm(string templateFile, string filename, string soldto, string catalog, string pricecode, string savedirectory)
         {
@@ -459,6 +462,34 @@ namespace OfflineFileGenerator
                                 cell = SetCellValue(sheet, winlist[2], (uint)currentIndex, CurrencyCode);
                                 SetCellStyle(cell);
                                 currentIndex--;
+                            }
+                        }
+                    }
+
+                    //bdeu hide launch date for non-booking catalogs #186
+                    if (BookingCatalog != "1")
+                    {
+                        if (!string.IsNullOrEmpty(TabularClearCellsWithNonBooking))
+                        {
+                            var clearCells = TabularClearCellsWithNonBooking.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                            foreach (string celladdress in clearCells)
+                            {
+                                SetCellValue(sheet, celladdress, string.Empty);
+                            }
+                        }
+                        if (!string.IsNullOrEmpty(TabularHideColumnWithNonBooking))
+                        {
+                            sheet.Column(int.Parse(TabularHideColumnWithNonBooking)).Width = 0;
+                        }
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(TabularClearCellsWithBooking))
+                        {
+                            var clearCells = TabularClearCellsWithBooking.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                            foreach (string celladdress in clearCells)
+                            {
+                                SetCellValue(sheet, celladdress, string.Empty);
                             }
                         }
                     }
